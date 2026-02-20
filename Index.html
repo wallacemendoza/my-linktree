@@ -4,24 +4,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>YOUR_NAME // DEV</title>
+  <title>Wallace Mendoza // DEV</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
   <style>
     :root {
       --black: #020408;
-      --deep: #050d1a;
       --blue: #0a6efd;
       --cyan: #00d4ff;
       --glow: #00aaff;
       --dim: #0d1f35;
       --text: #c8dff5;
       --muted: #3a5a7a;
-      --grid: rgba(0, 170, 255, 0.05);
+      --grid: rgba(0,170,255,0.05);
     }
 
 ```
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -33,7 +31,6 @@ body {
   cursor: crosshair;
 }
 
-/* Animated grid background */
 body::before {
   content: '';
   position: fixed;
@@ -46,32 +43,18 @@ body::before {
   pointer-events: none;
 }
 
-/* Scan-line overlay */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.08) 2px,
-    rgba(0,0,0,0.08) 4px
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px
   );
   z-index: 0;
   pointer-events: none;
 }
 
-.noise {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  pointer-events: none;
-}
-
-/* Glow blobs */
 .blob {
   position: fixed;
   border-radius: 50%;
@@ -85,11 +68,21 @@ body::after {
 .blob-2 { width: 400px; height: 400px; background: var(--cyan); bottom: -80px; right: -80px; animation-delay: -6s; }
 
 @keyframes drift {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(30px, 20px) scale(1.1); }
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(30px,20px) scale(1.1); }
 }
 
-/* ─── MAIN LAYOUT ─── */
+#cursor-glow {
+  position: fixed;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle, rgba(0,130,255,0.07) 0%, transparent 70%);
+  transform: translate(-50%,-50%);
+  transition: left 0.08s ease, top 0.08s ease;
+}
+
 main {
   position: relative;
   z-index: 1;
@@ -99,13 +92,11 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
 }
 
-/* ─── TERMINAL HEADER ─── */
 .terminal-bar {
   width: 100%;
-  background: rgba(5,13,26,0.9);
+  background: rgba(5,13,26,0.92);
   border: 1px solid rgba(0,170,255,0.2);
   border-bottom: none;
   border-radius: 10px 10px 0 0;
@@ -114,64 +105,41 @@ main {
   align-items: center;
   gap: 8px;
   backdrop-filter: blur(12px);
+  animation: fadeUp 0.4s ease both;
 }
 .dot { width: 12px; height: 12px; border-radius: 50%; }
 .dot-r { background: #ff5f57; }
 .dot-y { background: #ffbd2e; }
 .dot-g { background: #28c840; }
-.terminal-title {
-  margin-left: auto;
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 2px;
-}
+.terminal-title { margin-left: auto; font-size: 11px; color: var(--muted); letter-spacing: 2px; }
 
-/* ─── PROFILE CARD ─── */
 .card {
   width: 100%;
-  background: rgba(5, 13, 26, 0.85);
+  background: rgba(5,13,26,0.88);
   border: 1px solid rgba(0,170,255,0.2);
   border-radius: 0 0 10px 10px;
-  padding: 48px 40px 40px;
+  padding: 44px 40px 40px;
   backdrop-filter: blur(12px);
   box-shadow:
-    0 0 0 1px rgba(0,170,255,0.05),
+    0 0 0 1px rgba(0,170,255,0.04),
     0 24px 80px rgba(0,0,0,0.7),
     inset 0 1px 0 rgba(0,170,255,0.1);
+  animation: fadeUp 0.5s ease 0.1s both;
 }
 
-/* Avatar + identity */
-.identity {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  margin-bottom: 36px;
-}
-
-.avatar-wrap {
-  position: relative;
-  flex-shrink: 0;
-}
-
+.identity { display: flex; align-items: center; gap: 28px; margin-bottom: 32px; }
+.avatar-wrap { position: relative; flex-shrink: 0; }
 .avatar {
-  width: 90px;
-  height: 90px;
+  width: 88px; height: 88px;
   border-radius: 50%;
   background: var(--dim);
   border: 2px solid var(--glow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  color: var(--cyan);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; color: var(--cyan);
   box-shadow: 0 0 20px rgba(0,170,255,0.4), inset 0 0 20px rgba(0,170,255,0.05);
   overflow: hidden;
-  position: relative;
 }
-
-/* Replace the emoji with your actual photo: <img src="photo.jpg" alt=""> */
-.avatar span { font-size: 38px; }
-
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
 .avatar-ring {
   position: absolute;
   inset: -6px;
@@ -192,58 +160,42 @@ main {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .name-block { flex: 1; min-width: 0; }
-
 .name {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(22px, 4vw, 30px);
+  font-size: clamp(20px, 4vw, 28px);
   font-weight: 900;
   letter-spacing: 2px;
   color: #fff;
   line-height: 1.1;
   text-shadow: 0 0 20px rgba(0,170,255,0.5);
 }
-
-.role {
-  margin-top: 6px;
-  font-size: 12px;
-  color: var(--cyan);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-.status {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 10px;
-  font-size: 11px;
-  color: var(--muted);
-}
+.role { margin-top: 6px; font-size: 11px; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; }
+.status { display: flex; align-items: center; gap: 7px; margin-top: 10px; font-size: 11px; color: var(--muted); }
 .status-dot {
   width: 7px; height: 7px;
   background: #00ff88;
   border-radius: 50%;
   box-shadow: 0 0 6px #00ff88;
   animation: pulse-green 2s ease-in-out infinite;
+  flex-shrink: 0;
 }
 @keyframes pulse-green {
   0%, 100% { opacity: 1; box-shadow: 0 0 6px #00ff88; }
-  50% { opacity: 0.5; box-shadow: 0 0 12px #00ff88; }
+  50%       { opacity: 0.4; box-shadow: 0 0 14px #00ff88; }
 }
 
-/* ─── BIO / TYPING ─── */
 .bio-block {
-  border-left: 2px solid rgba(0,170,255,0.3);
+  border-left: 2px solid rgba(0,170,255,0.25);
   padding-left: 16px;
-  margin-bottom: 36px;
+  margin-bottom: 32px;
   font-size: 13px;
-  line-height: 1.8;
+  line-height: 1.9;
   color: var(--muted);
 }
-.bio-block .highlight { color: var(--cyan); }
-.cursor {
+.bio-block .hi { color: var(--cyan); }
+.cursor-blink {
   display: inline-block;
-  width: 8px; height: 14px;
+  width: 8px; height: 13px;
   background: var(--cyan);
   margin-left: 2px;
   vertical-align: middle;
@@ -251,21 +203,19 @@ main {
 }
 @keyframes blink { 50% { opacity: 0; } }
 
-/* ─── DIVIDER ─── */
 .divider {
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,170,255,0.3), transparent);
-  margin: 0 0 32px;
+  background: linear-gradient(90deg, transparent, rgba(0,170,255,0.25), transparent);
+  margin: 0 0 28px;
 }
 
-/* ─── SECTION LABEL ─── */
 .section-label {
   font-size: 10px;
   letter-spacing: 4px;
   color: var(--muted);
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -274,138 +224,89 @@ main {
   content: '';
   flex: 1;
   height: 1px;
-  background: rgba(0,170,255,0.15);
+  background: rgba(0,170,255,0.12);
 }
 
-/* ─── LINKS GRID ─── */
 .links {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .link-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
-  background: rgba(10,30,55,0.6);
-  border: 1px solid rgba(0,170,255,0.12);
-  border-radius: 6px;
+  padding: 13px 14px;
+  background: rgba(10,30,55,0.55);
+  border: 1px solid rgba(0,170,255,0.1);
+  border-radius: 7px;
   text-decoration: none;
   color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
   font-size: 12px;
-  letter-spacing: 1px;
-  transition: all 0.25s ease;
+  cursor: pointer;
+  transition: all 0.22s ease;
   position: relative;
   overflow: hidden;
 }
-
 .link-item::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,170,255,0.08), transparent);
+  background: linear-gradient(135deg, rgba(0,170,255,0.07), transparent);
   opacity: 0;
-  transition: opacity 0.25s;
+  transition: opacity 0.22s;
 }
-
 .link-item:hover {
-  border-color: rgba(0,170,255,0.5);
+  border-color: rgba(0,170,255,0.45);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,100,200,0.2), 0 0 0 1px rgba(0,170,255,0.2);
+  box-shadow: 0 8px 24px rgba(0,100,200,0.18), 0 0 0 1px rgba(0,170,255,0.18);
 }
 .link-item:hover::before { opacity: 1; }
 
 .link-icon {
   width: 34px; height: 34px;
-  border-radius: 6px;
+  border-radius: 7px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 17px;
   flex-shrink: 0;
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
 }
-
 .link-text {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
+  min-width: 0;
 }
 .link-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
-.link-handle { font-size: 10px; color: var(--muted); }
-
+.link-handle { font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .link-arrow {
   margin-left: auto;
   color: var(--muted);
-  font-size: 12px;
-  transition: transform 0.25s;
+  font-size: 13px;
+  transition: transform 0.22s, color 0.22s;
   position: relative; z-index: 1;
+  flex-shrink: 0;
 }
-.link-item:hover .link-arrow { transform: translate(2px, -2px); color: var(--cyan); }
+.link-item:hover .link-arrow { transform: translate(2px,-2px); color: var(--cyan); }
 
-/* Individual link colors */
-.lk-github .link-icon  { background: rgba(36,41,46,0.8);  color: #fff; }
-.lk-linkedin .link-icon { background: rgba(0,119,181,0.2); color: #0a66c2; }
-.lk-facebook .link-icon { background: rgba(24,119,242,0.15); color: #1877f2; }
-.lk-email .link-icon   { background: rgba(0,212,255,0.1);  color: var(--cyan); }
-.lk-portfolio .link-icon { background: rgba(0,170,255,0.1); color: var(--glow); }
-.lk-twitter .link-icon  { background: rgba(255,255,255,0.05); color: #e7e9ea; }
+.lk-github    .link-icon { background: rgba(36,41,46,0.8);    color: #e6edf3; }
+.lk-linkedin  .link-icon { background: rgba(0,119,181,0.18);  color: #0a66c2; }
+.lk-facebook  .link-icon { background: rgba(24,119,242,0.15); color: #1877f2; }
+.lk-email     .link-icon { background: rgba(0,212,255,0.1);   color: var(--cyan); }
+.lk-portfolio .link-icon { background: rgba(0,170,255,0.1);   color: var(--glow); }
+.lk-twitter   .link-icon { background: rgba(255,255,255,0.05);color: #e7e9ea; }
 .lk-stackoverflow .link-icon { background: rgba(244,128,36,0.15); color: #f48024; }
-.lk-devto .link-icon   { background: rgba(255,255,255,0.05); color: #fff; }
-
-/* ─── TECH STACK BADGES ─── */
-.stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 0;
-}
-.badge {
-  padding: 4px 10px;
-  border: 1px solid rgba(0,170,255,0.2);
-  border-radius: 3px;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-  background: rgba(0,170,255,0.04);
-  text-transform: uppercase;
-  transition: all 0.2s;
-}
-.badge:hover {
-  border-color: var(--cyan);
-  color: var(--cyan);
-  background: rgba(0,212,255,0.08);
-}
-
-/* ─── FOOTER ─── */
-.footer {
-  margin-top: 28px;
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 2px;
-  text-align: center;
-  opacity: 0.6;
-}
-
-/* ─── LOAD ANIMATION ─── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.terminal-bar { animation: fadeUp 0.4s ease both; }
-.card { animation: fadeUp 0.5s ease 0.1s both; }
+.lk-devto     .link-icon { background: rgba(255,255,255,0.06);color: #fff; }
 
 .link-item:nth-child(1) { animation: fadeUp 0.4s ease 0.35s both; }
 .link-item:nth-child(2) { animation: fadeUp 0.4s ease 0.42s both; }
@@ -416,49 +317,80 @@ main {
 .link-item:nth-child(7) { animation: fadeUp 0.4s ease 0.77s both; }
 .link-item:nth-child(8) { animation: fadeUp 0.4s ease 0.84s both; }
 
-/* ─── RESPONSIVE ─── */
-@media (max-width: 520px) {
-  main { padding: 32px 12px 60px; }
-  .card { padding: 32px 20px 28px; }
-  .identity { gap: 18px; }
-  .avatar { width: 72px; height: 72px; }
-  .links { grid-template-columns: 1fr; }
+.stack { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge {
+  padding: 4px 10px;
+  border: 1px solid rgba(0,170,255,0.18);
+  border-radius: 3px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  background: rgba(0,170,255,0.04);
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.badge:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(0,212,255,0.08); }
+
+.footer {
+  margin-top: 24px;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-align: center;
+  opacity: 0.5;
 }
 
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 520px) {
+  main { padding: 28px 12px 56px; }
+  .card { padding: 28px 18px 26px; }
+  .identity { gap: 16px; }
+  .avatar { width: 72px; height: 72px; }
+  .links { grid-template-columns: 1fr; }
+  .name { font-size: 20px; }
+}
 @media (min-width: 521px) and (max-width: 820px) {
-  main { padding: 48px 32px 80px; }
+  main { padding: 44px 28px 72px; }
 }
 ```
 
   </style>
 </head>
 <body>
-  <div class="noise"></div>
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
+  <div id="cursor-glow"></div>
 
   <main>
     <div class="terminal-bar">
       <span class="dot dot-r"></span>
       <span class="dot dot-y"></span>
       <span class="dot dot-g"></span>
-      <span class="terminal-title">~/profile — zsh</span>
+      <span class="terminal-title">~/wallacemendoza &mdash; zsh</span>
     </div>
 
 ```
 <div class="card">
 
-  <!-- Identity -->
   <div class="identity">
     <div class="avatar-wrap">
       <div class="avatar">
-        <!-- Replace with: <img src="photo.jpg" style="width:100%;height:100%;object-fit:cover;"> -->
-        <span>⚡</span>
+        <!--
+          ADD YOUR PHOTO:
+          1. Upload photo.jpg to your repo root
+          2. Replace the span below with:
+             <img src="photo.jpg" alt="Wallace Mendoza">
+        -->
+        <span>&#9889;</span>
       </div>
       <div class="avatar-ring"></div>
     </div>
     <div class="name-block">
-      <div class="name">YOUR_NAME</div>
+      <div class="name">Wallace Mendoza</div>
       <div class="role">Software Engineer</div>
       <div class="status">
         <span class="status-dot"></span>
@@ -467,44 +399,41 @@ main {
     </div>
   </div>
 
-  <!-- Bio -->
   <div class="bio-block">
-    <span class="highlight">$</span> whoami<br>
-    Building <span class="highlight">robust systems</span> &amp; 
-    <span class="highlight">clean interfaces</span>.<br>
-    Passionate about <span class="highlight">open source</span>, 
-    distributed architecture &amp; developer tooling.<span class="cursor"></span>
+    <span class="hi">$</span> whoami<br>
+    Building <span class="hi">robust systems</span> &amp; <span class="hi">clean interfaces</span>.<br>
+    Passionate about <span class="hi">open source</span>,
+    distributed architecture &amp; developer tooling.<span class="cursor-blink"></span>
   </div>
 
   <div class="divider"></div>
 
-  <!-- Social Links -->
   <div class="section-label">// connect</div>
   <div class="links">
 
-    <a href="https://github.com/YOUR_USERNAME" target="_blank" class="link-item lk-github">
+    <a href="https://github.com/wallacemendoza" target="_blank" rel="noopener" class="link-item lk-github">
       <div class="link-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
       </div>
       <div class="link-text">
         <span class="link-name">GitHub</span>
-        <span class="link-handle">@YOUR_USERNAME</span>
+        <span class="link-handle">@wallacemendoza</span>
       </div>
-      <span class="link-arrow">↗</span>
+      <span class="link-arrow">&#8599;</span>
     </a>
 
-    <a href="https://linkedin.com/in/YOUR_USERNAME" target="_blank" class="link-item lk-linkedin">
+    <a href="https://linkedin.com/in/wallacemendoza" target="_blank" rel="noopener" class="link-item lk-linkedin">
       <div class="link-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </div>
       <div class="link-text">
         <span class="link-name">LinkedIn</span>
-        <span class="link-handle">YOUR_NAME</span>
+        <span class="link-handle">wallacemendoza</span>
       </div>
-      <span class="link-arrow">↗</span>
+      <span class="link-arrow">&#8599;</span>
     </a>
 
-    <a href="https://YOUR_PORTFOLIO.github.io" target="_blank" class="link-item lk-portfolio">
+    <a href="https://wallacemendoza.github.io" target="_blank" rel="noopener" class="link-item lk-portfolio">
       <div class="link-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
       </div>
@@ -512,69 +441,68 @@ main {
         <span class="link-name">Portfolio</span>
         <span class="link-handle">Work &amp; Projects</span>
       </div>
-      <span class="link-arrow">↗</span>
+      <span class="link-arrow">&#8599;</span>
     </a>
 
-    <a href="mailto:YOUR@EMAIL.COM" class="link-item lk-email">
+    <div class="link-item lk-email" onclick="copyEmail()" id="email-link">
       <div class="link-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </div>
       <div class="link-text">
         <span class="link-name">Email</span>
-        <span class="link-handle">YOUR@EMAIL.COM</span>
+        <span class="link-handle" id="email-handle">click to copy</span>
       </div>
-      <span class="link-arrow">↗</span>
-    </a>
+      <span class="link-arrow">&#8599;</span>
+    </div>
 
-    <a href="https://facebook.com/YOUR_USERNAME" target="_blank" class="link-item lk-facebook">
+    <a href="https://facebook.com/wallacemendoza" target="_blank" rel="noopener" class="link-item lk-facebook">
       <div class="link-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
       </div>
       <div class="link-text">
         <span class="link-name">Facebook</span>
-        <span class="link-handle">@YOUR_USERNAME</span>
+        <span class="link-handle">wallacemendoza</span>
       </div>
-      <span class="link-arrow">↗</span>
+      <span class="link-arrow">&#8599;</span>
     </a>
 
-    <a href="https://twitter.com/YOUR_USERNAME" target="_blank" class="link-item lk-twitter">
+    <a href="https://twitter.com/wallacemendoza" target="_blank" rel="noopener" class="link-item lk-twitter">
       <div class="link-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       </div>
       <div class="link-text">
         <span class="link-name">X / Twitter</span>
-        <span class="link-handle">@YOUR_USERNAME</span>
+        <span class="link-handle">@wallacemendoza</span>
       </div>
-      <span class="link-arrow">↗</span>
+      <span class="link-arrow">&#8599;</span>
     </a>
 
-    <a href="https://stackoverflow.com/users/YOUR_ID" target="_blank" class="link-item lk-stackoverflow">
+    <a href="https://stackoverflow.com/users/wallacemendoza" target="_blank" rel="noopener" class="link-item lk-stackoverflow">
       <div class="link-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.725 0l-1.72 1.277 6.39 8.588 1.716-1.277L15.725 0zm-3.94 3.418l-1.369 1.644 8.225 6.85 1.369-1.644-8.225-6.85zm-3.15 4.465l-.905 1.94 9.702 4.517.904-1.94-9.701-4.517zm-1.85 4.86l-.44 2.093 10.473 2.201.44-2.092-10.473-2.203zM1.89 15.47V24h19.19v-8.53h-2.133v6.397H4.021V15.47H1.89zm4.265 2.133v2.13h10.66v-2.13H6.154z"/></svg>
       </div>
       <div class="link-text">
         <span class="link-name">Stack Overflow</span>
-        <span class="link-handle">YOUR_NAME</span>
+        <span class="link-handle">wallacemendoza</span>
       </div>
-      <span class="link-arrow">↗</span>
+      <span class="link-arrow">&#8599;</span>
     </a>
 
-    <a href="https://dev.to/YOUR_USERNAME" target="_blank" class="link-item lk-devto">
+    <a href="https://dev.to/wallacemendoza" target="_blank" rel="noopener" class="link-item lk-devto">
       <div class="link-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6l.02 2.44.04 2.45.56-.02c.41 0 .63-.07.83-.26.24-.24.26-.36.26-2.2 0-1.91-.02-1.96-.29-2.18zM0 4.94v14.12h24V4.94H0zM8.56 15.3c-.44.58-1.06.77-2.53.77H4.71V8.53h1.4c1.67 0 2.16.18 2.6.9.27.43.29.6.32 2.57.05 2.23-.02 2.73-.47 3.3zm5.09-5.47h-2.47v1.77h1.52v1.28l-.72.04-.75.03v1.77l1.22.03 1.2.04v1.28h-1.6c-1.53 0-1.6-.01-1.87-.3l-.3-.28v-3.16c0-3.02.01-3.18.25-3.48.23-.31.25-.31 1.88-.31h1.64v1.3zm4.68 5.45c-.17.43-.64.79-1 .79-.18 0-.45-.15-.67-.39-.32-.32-.45-.63-.82-2.08l-.9-3.39-.45-1.67h.76c.4 0 .75.02.75.05 0 .06 1.16 4.54 1.26 4.83.04.15.32-.7.73-2.3l.66-2.52.74-.04c.4-.02.73 0 .73.04 0 .14-1.67 6.38-1.8 6.68z"/></svg>
       </div>
       <div class="link-text">
         <span class="link-name">Dev.to</span>
-        <span class="link-handle">@YOUR_USERNAME</span>
+        <span class="link-handle">@wallacemendoza</span>
       </div>
-      <span class="link-arrow">↗</span>
+      <span class="link-arrow">&#8599;</span>
     </a>
 
   </div>
 
   <div class="divider"></div>
 
-  <!-- Tech Stack -->
   <div class="section-label">// stack</div>
   <div class="stack">
     <span class="badge">JavaScript</span>
@@ -589,35 +517,35 @@ main {
 
 </div>
 
-<div class="footer">
-  &lt;/ built with terminal energy &gt;
-</div>
+<div class="footer">&lt;/ built with terminal energy &gt;</div>
 ```
 
   </main>
 
   <script>
-    // Subtle cursor glow effect
-    const glow = document.createElement('div');
-    glow.style.cssText = `
-      position:fixed; width:300px; height:300px;
-      border-radius:50%; pointer-events:none; z-index:0;
-      background: radial-gradient(circle, rgba(0,130,255,0.06) 0%, transparent 70%);
-      transform: translate(-50%,-50%);
-      transition: left 0.1s ease, top 0.1s ease;
-    `;
-    document.body.appendChild(glow);
-    document.addEventListener('mousemove', e => {
-      glow.style.left = e.clientX + 'px';
-      glow.style.top  = e.clientY + 'px';
+    // Cursor glow
+    var g = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', function(e) {
+      g.style.left = e.clientX + 'px';
+      g.style.top  = e.clientY + 'px';
     });
 
-    // Typing effect for bio
-    const bioLines = [
-      '$ whoami',
-      'Building <span class="highlight">robust systems</span> &amp; <span class="highlight">clean interfaces</span>.',
-      'Passionate about <span class="highlight">open source</span>, distributed architecture &amp; developer tooling.'
-    ];
+    // Safe email — replace YOUR_EMAIL below with your real address
+    // e.g. var _e = 'wallace@example.com';
+    var _e = 'YOUR_EMAIL@HERE.COM';
+
+    function copyEmail() {
+      var h = document.getElementById('email-handle');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(_e).then(function() {
+          h.textContent = 'copied!';
+          h.style.color = '#00ff88';
+          setTimeout(function() { h.textContent = _e; h.style.color = ''; }, 2000);
+        });
+      } else {
+        window.location.href = 'mailto:' + _e;
+      }
+    }
   </script>
 
 </body>
